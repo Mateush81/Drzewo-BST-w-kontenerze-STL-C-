@@ -1,4 +1,4 @@
-#include <iostream>       // Do obsługi wejścia/wyjścia
+﻿#include <iostream>       // Do obsługi wejścia/wyjścia
 #include <string>         // Do użycia typu std::string
 #include "BST.h"          // Klasa BST – metody insert, remove, clear, display, findPath
 #include "FileManager.h"  // Klasa FileManager – operacje na plikach
@@ -111,4 +111,3 @@ int main() {
 
     return 0; // Zakończenie programu
 }
-
