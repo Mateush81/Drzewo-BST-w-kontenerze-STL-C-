@@ -49,3 +49,5 @@ public:
 	BSTNode* getRoot() { return root; }		// funkcja do pobierania korzenia drzewa
 
 };
+fghfgh
+gfhfg
