@@ -102,7 +102,62 @@ BSTNode* BST::succ(BSTNode* x) {
 }
 
 
-//usuwanie wêz³a
+
+
+//Usuwanie wêz³a
+
+BSTNode* BST::removeNode(BSTNode* x) {
+	BSTNode* y = x->parent;		
+	BSTNode* z;
+
+
+	if (x->left && x->right)
+	{
+		z = (rand() % 2) ? removeNode(pred(x)) : removeNode(succ(x));
+		z->left = x->left;
+		if (z->left)
+		{
+			z->left->parent = z;
+		}
+
+		z->right = x->right;
+
+		if (z->right)
+		{
+			z->right->parent = z;
+		}
+		count++;
+	}
+	else
+	{
+		z = (x->left) ? x->left : x->right;
+	}
+
+	if (z)
+	{
+		z->parent = y;
+	}
+	if (!y)
+	{
+		root = z;
+	}
+	else if (y->left == x)
+	{
+		y->left = z;
+	}
+	else { y->right = z; }
+
+	count--;
+	return x;
+
+}
+
+
+
+
+
+
+//funkcja do usuwania klucza z drzewa
 void BST::remove(int key) {
 	BSTNode* x = search(key);		//szukamy wêz³a do usuniêcia
 	if (x) {						//jeœli znaleŸliœmy wêze³
@@ -121,6 +176,15 @@ void BST::remove(int key) {
 //preorder -> lewe poddrzewo -> korzeñ -> prawe poddrzewo
 //postorder -> lewe poddrzewo -> prawe poddrzewo -> korzeñ
 
+//preorder
+void BST::preorder(BSTNode* x) {
+	if (x) {
+		cout << x->key << " ";			//odwiedzamy wêze³
+		preorder(x->left);				//odwiedzamy lewe poddrzewo
+		preorder(x->right);				//odwiedzamy prawe poddrzewo
+	}
+}
+
 //inorder
 void BST::inorder(BSTNode* x) {
 	if (x) {
@@ -130,6 +194,17 @@ void BST::inorder(BSTNode* x) {
 	}
 }
 
+//postorder
+void BST::postorder(BSTNode* x) {
+	if (x) {
+		postorder(x->left);				//odwiedzamy lewe poddrzewo
+		postorder(x->right);			//odwiedzamy prawe poddrzewo
+		cout << x->key << " ";			//odwiedzamy wêze³
+	}
+}
+
+
+
 
 
 //wyœwietlanie drzewa
@@ -138,3 +213,4 @@ void BST::display() {
 	inorder(root);						//wyœwietlamy drzewo w kolejnoœci inorder
 	cout << "\nLiczba wezlow: " << count << endl;	//wyœwietlamy liczbê wêz³ów
 }
+
