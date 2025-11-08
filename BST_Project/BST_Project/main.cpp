@@ -111,7 +111,3 @@ int main() {
 
     return 0; // Zakończenie programu
 }
-
-
-
-hejka, usuń to
