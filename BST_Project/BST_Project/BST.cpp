@@ -100,3 +100,41 @@ BSTNode* BST::succ(BSTNode* x) {
 	}
 	return y;						//zwracamy nastêpnik
 }
+
+
+//usuwanie wêz³a
+void BST::remove(int key) {
+	BSTNode* x = search(key);		//szukamy wêz³a do usuniêcia
+	if (x) {						//jeœli znaleŸliœmy wêze³
+		removeNode(x);				//usuwamy go				--> jest w osobnej funkcji removeNode()
+		count--;					//zmniejszamy licznik wêz³ów
+	}
+	else
+	{
+		cout << "Wartosc nie znaleziona w drzewie." << endl;
+	}
+}
+
+
+//przechodzenie po drzewie:
+//preorder -> korzeñ -> lewe poddrzewo -> prawe poddrzewo
+//preorder -> lewe poddrzewo -> korzeñ -> prawe poddrzewo
+//postorder -> lewe poddrzewo -> prawe poddrzewo -> korzeñ
+
+//inorder
+void BST::inorder(BSTNode* x) {
+	if (x) {
+		inorder(x->left);				//odwiedzamy lewe poddrzewo
+		cout << x->key << " ";			//odwiedzamy wêze³
+		inorder(x->right);				//odwiedzamy prawe poddrzewo
+	}
+}
+
+
+
+//wyœwietlanie drzewa
+void BST::display() {
+	cout << "Drzewo BST (inorder): ";
+	inorder(root);						//wyœwietlamy drzewo w kolejnoœci inorder
+	cout << "\nLiczba wezlow: " << count << endl;	//wyœwietlamy liczbê wêz³ów
+}
