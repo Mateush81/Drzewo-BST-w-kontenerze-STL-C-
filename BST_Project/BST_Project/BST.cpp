@@ -1,9 +1,13 @@
 #include "BST.h"
-
 using namespace std;
 
+
 BST::BST() : root(nullptr), count(0) {}  //root(nullptr), czyli na pocz¹tku drzewo jest puste
+
 BST::~BST() { destroy(root); }			//niszczenie drzewa przy usuwaniu obiektu BST
+
+
+
 
 void BST::destroy(BSTNode* x) {			// usuwanie rekurencyjnie, czyli: lewe -> prawe -> rodzic -> delete
 	if (!x) return;				// jeœli x jest pusty(nullptr), to koñczymy funkcjê
@@ -17,16 +21,17 @@ void BST::destroy(BSTNode* x) {			// usuwanie rekurencyjnie, czyli: lewe -> praw
 //wstawianie elementu
 
 bool BST::insert(int key) {
-	BSTNode* n = new BSTNode(key);		//nowy wezel 'n'
-	BSTNode* y = nullptr;				//'y' oznacza poprzednika
-	BSTNode* x = root;					//'x' oznacza obecny wezel (pocz¹tkowo korzeñ)
+	BSTNode* n = new BSTNode(key);		// 'n' czyli, nowy wezel  
+	BSTNode* y = nullptr;				// 'y' oznacza poprzednika  
+	BSTNode* x = root;					//'x' oznacza obecny wezel (pocz¹tkowo korzeñ)  
 
 
 	while (x) {
 		y = x;
 		if (key = x->key)
 		{
-			delete n; return false;
+			delete n;
+			return false;
 		}
 		x = (key < x->key) ? x->left : x->right;	//jeœli klucz jest mniejszy, idziemy w lewo, jeœli wiêkszy, idziemy w prawo		
 }
@@ -56,22 +61,6 @@ BSTNode* BST::search(int key) {
 	return x;							//jeœli równa to zwracamy znaleziony wêze³, a jeœli nie znaleziono to zwracamy nullptr
 }
 
-
-//minimum
-BSTNode* BST::minNode(BSTNode* x) {
-	while (x && x->left) {				//dopóki istnieje lewe dziecko
-		x = x->left;					//idziemy w lewo
-	}
-	return x;							//zwracamy najmniejszy wêze³
-}
-
-//maksimum
-BSTNode* BST::maxNode(BSTNode* x) {
-	while (x && x->right) {			//dopóki istnieje prawe dziecko
-		x = x->right;				//idziemy w prawo
-	}
-	return x;						//zwracamy najwiêkszy wêze³
-}
 
 
 
@@ -214,3 +203,95 @@ void BST::display() {
 	cout << "\nLiczba wezlow: " << count << endl;	//wyœwietlamy liczbê wêz³ów
 }
 
+
+
+//œcie¿ka do elementu
+void BST::showPathTo(int key) {
+	BSTNode* x = root;					//'x' oznacza obecny wezel (pocz¹tkowo korzeñ)
+	cout << "Sciezka: ";
+
+
+	while (x) {
+		cout << x->key;			//wyœwietlamy klucz obecnego wêz³a
+		if (x->key == key) {			//jeœli znaleŸliœmy klucz
+			cout <<"(Znaleziono)\n";
+			return;						//koñczymy funkcjê
+		}
+		cout << " -> ";					// 'stzra³ka' pokazuje droge przez kolejne elementy
+		x = (key < x->key) ? x->left : x->right;	//jeœli klucz jest mniejszy, idziemy w lewo, jeœli wiêkszy, idziemy w prawo
+	}
+	cout << "\nWartosc nie znaleziona w drzewie." << endl; //jeœli nie znaleŸliœmy klucza
+}
+
+
+
+
+//wpisywanie w kolejnoœci inorder do pliku
+void BST::writeInorder(BSTNode* x, std::ofstream& out) const {
+	if (!x) return;
+	writeInorder(x->left, out);		//odwiedzamy lewe poddrzewo
+	out << x->key << " ";			//zapisujemy klucz
+	writeInorder(x->right, out);	//odwiedzamy prawe poddrzewo
+	
+}
+
+
+//zapisywanie do pliku tekstowego
+bool BST::saveToText(const string& filename) const {
+	ofstream out(filename);
+	if (!out) return false;					//jeœli nie uda³o siê otworzyæ pliku, zwracamy false
+	
+	writeInorder(root, out);			//zapisujemy drzewo w kolejnoœci inorder
+	cout << "\n";
+	return true;						//zwracamy true, bo zapis siê powiód³
+}
+
+
+//wczytywanie z pliku tekstowego
+bool BST::loadFromText(const string& filename) {
+	ifstream in(filename);
+	if (!in) return false;					//jeœli nie uda³o siê otworzyæ pliku, zwracamy false
+	
+	destroy(root);						//niszczymy obecne drzewo
+	root = nullptr;						//ustawiamy korzeñ na nullptr
+	count = 0;							//zerujemy licznik wêz³ów
+	
+	
+	int k;
+	while (in >> k) {					//czytamy klucze z pliku
+		insert(k);					//wstawiamy klucze do drzewa
+	}
+	return true;						//zwracamy true, bo wczytywanie siê powiod³o
+}
+
+
+
+//zapisywanie do pliku binarnego
+void BST::saveToBinary(ostream& out) const {
+	int n = count;
+	out.write((char*)&n, sizeof(n));		//zapisujemy liczbê wêz³ów)
+
+	//inorder
+	ofstream* o = (ofstream*)&out;
+	writeInorder(root, *o);				//zapisujemy drzewo w kolejnoœci inorder
+
+}
+
+
+//odczytywanaie z pliku binarnego
+void BST::loadFromBinary(istream& in) {
+	destroy(root);						//niszczymy obecne drzewo
+	root = nullptr;						//ustawiamy korzeñ na nullptr
+	count = 0;							//zerujemy licznik wêz³ów
+	
+	//inorder
+	int n;
+	in.read((char*)&n, sizeof(n));		//odczytujemy liczbê wêz³ów
+
+	for (int i = 0; i < n; i++)
+	{
+		int k;
+		in.read((char*)&k, sizeof(k));	//odczytujemy klucz
+		insert(k);					//wstawiamy klucz do drzewa
+	}
+}
