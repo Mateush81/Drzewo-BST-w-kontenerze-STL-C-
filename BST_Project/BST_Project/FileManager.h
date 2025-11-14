@@ -1,22 +1,13 @@
-#ifndef FILEMANAGER_H
-#define FILEMANAGER_H
-
-#include <string>
+#pragma once
 #include "BST.h"
+#include <string>
 
 class FileManager {
+
 public:
-    // Konstruktor klasy FileManager
-    FileManager();
+    static bool saveBinary(const std::string& filename, BST& tree);
+    static bool loadBinary(const std::string& filename, BST& tree);
 
-    // Zapis drzewa BST do pliku binarnego
-    void saveBinary(const BST& tree, const std::string& filename);
-
-    // Odczyt drzewa BST z pliku binarnego
-    void loadBinary(BST& tree, const std::string& filename);
-
-    // Wczytanie liczb z pliku tekstowego i dodanie ich do drzewa BST
-    void loadFromText(BST& tree, const std::string& filename);
+    static bool saveText(const std::string& filename, BST& tree);
+    static bool loadText(const std::string& filename, BST& tree);
 };
-
-#endif
