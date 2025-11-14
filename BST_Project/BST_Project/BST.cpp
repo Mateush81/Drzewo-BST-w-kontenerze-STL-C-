@@ -63,6 +63,31 @@ BSTNode* BST::search(int key) {
 
 
 
+//min i max
+BSTNode* BST::minNode(BSTNode* x) {
+	while (x && x->left) {					//dopóki istnieje lewe dziecko
+		x = x->left;					//idziemy w lewo
+	}
+	return x;							//zwracamy najmniejszy wêze³
+}
+
+
+BSTNode* BST::maxNode(BSTNode* x) {
+	while (x && x->right) {				//dopóki istnieje prawe dziecko
+		x = x->right;					//idziemy w prawo
+	}
+	return x;							//zwracamy najwiêkszy wêze³
+}
+
+
+
+
+
+
+
+
+
+
 
 //poprzednik
 BSTNode* BST::pred(BSTNode* x) {
