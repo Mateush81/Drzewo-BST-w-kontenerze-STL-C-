@@ -17,9 +17,9 @@ void BST::destroy(BSTNode* x) {			// usuwanie rekurencyjnie, czyli: lewe -> praw
 }
 
 
-
+/////////////////
 //wstawianie elementu
-
+/////////////////
 bool BST::insert(int key) {
 	BSTNode* n = new BSTNode(key);		// 'n' czyli, nowy wezel  
 	BSTNode* y = nullptr;				// 'y' oznacza poprzednika  
@@ -28,7 +28,7 @@ bool BST::insert(int key) {
 
 	while (x) {
 		y = x;
-		if (key = x->key)
+		if (key == x->key)
 		{
 			delete n;
 			return false;
@@ -52,7 +52,10 @@ bool BST::insert(int key) {
 }
 
 
+
+/////////////////
 //szukanie elementu
+/////////////////
 BSTNode* BST::search(int key) {
 	BSTNode* x = root;					//'x' oznacza obecny wezel (pocz¹tkowo korzeñ)
 	while (x && x->key != key) {		
@@ -62,9 +65,26 @@ BSTNode* BST::search(int key) {
 }
 
 
+//minimum
+BSTNode* BST::minNode(BSTNode* x) {
+	while (x && x->left) {				//dopóki istnieje lewe dziecko
+		x = x->left;					//idziemy w lewo
+	}
+	return x;							//zwracamy najmniejszy wêze³
+}
+
+//maksimum
+BSTNode* BST::maxNode(BSTNode* x) {
+	while (x && x->right) {			//dopóki istnieje prawe dziecko
+		x = x->right;				//idziemy w prawo
+	}
+	return x;						//zwracamy najwiêkszy wêze³
+}
+
 
 
 //poprzednik
+/////////////////
 BSTNode* BST::pred(BSTNode* x) {
 	if (x->left) {					//jeœli istnieje lewe dziecko
 		return maxNode(x->left);	//to poprzednik to maksimum w lewym poddrzewie
@@ -77,7 +97,10 @@ BSTNode* BST::pred(BSTNode* x) {
 	return y;						//zwracamy poprzednika
 }
 
+
+/////////////////
 //nastêpnik
+/////////////////
 BSTNode* BST::succ(BSTNode* x) {
 	if (x->right) {					//jeœli istnieje prawe dziecko
 		return minNode(x->right);	//to nastêpnik to minimum w prawym poddrzewie
@@ -92,8 +115,9 @@ BSTNode* BST::succ(BSTNode* x) {
 
 
 
-
+/////////////////
 //Usuwanie wêz³a
+/////////////////
 
 BSTNode* BST::removeNode(BSTNode* x) {
 	BSTNode* y = x->parent;		
@@ -138,8 +162,8 @@ BSTNode* BST::removeNode(BSTNode* x) {
 
 	count--;
 	return x;
-
 }
+
 
 
 
@@ -158,6 +182,17 @@ void BST::remove(int key) {
 		cout << "Wartosc nie znaleziona w drzewie." << endl;
 	}
 }
+
+
+
+/////////////////
+//Szukanie drogi do elementu
+/////////////////
+
+
+
+
+
 
 
 //przechodzenie po drzewie:
