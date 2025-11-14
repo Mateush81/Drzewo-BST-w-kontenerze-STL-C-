@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <fstream>
+#include <string>
 
 
 /*
@@ -30,22 +32,40 @@ private:
 	void destroy(BSTNode* x);			// funkcja do niszczenia drzewa (usuwania wszystkich wêz³ów)
 
 
+	void writeInorder(BSTNode* x, std::ofstream& out) const;
+
 public:
 	BST();
 	~BST();
 
 	bool insert(int key);	// funkcja do wstawiania klucza do drzewa
+	void remove(int key);			// funkcja do usuwania klucza z drzewa
 	BSTNode* search(int key);		// funkcja do wyszukiwania klucza w drzewie
+
+
+
 	BSTNode* minNode(BSTNode* x);	// funkcja do znajdowania najmniejszego wêz³a
 	BSTNode* maxNode(BSTNode* x);	// funkcja do znajdowania najwiêkszego wêz³a
+
+
 	BSTNode* pred(BSTNode* x);		// funkcja do znajdowania poprzednika wêz³a
 	BSTNode* succ(BSTNode* x);		// funkcja do znajdowania nastêpnika wêz³a
-	void remove(int key);			// funkcja do usuwania klucza z drzewa
 
 	void preorder(BSTNode* node);	//wyœwietlanie w kolejnoœci preorder
 	void inorder(BSTNode* node);	//wyœwietlanie w kolejnoœci inorder
 	void postorder(BSTNode* node);	//wyœwietlanie w kolejnoœci postorder
+
+
+
 	void display();					// funkcja do wyœwietlania drzewa
-	BSTNode* getRoot() { return root; }		// funkcja do pobierania korzenia drzewa
+	void showPathTo(int key);			// funkcja do wyœwietlania œcie¿ki
+
+	bool saveToText(const std::string& filename) const; // funkcja do zapisywania drzewa do pliku tekstowego
+	bool loadFromText(const std::string& filename); // funkcja do wczytywania drzewa z pliku tekstowego
+
+	void saveToBinary(std::ostream& out) const; // funkcja do zapisywania drzewa do pliku binarnego
+	void loadFromBinary(std::istream& in); // funkcja do wczytywania drzewa z pliku binarnego
+
+	BSTNode* getRoot() { return root; } // funkcja do pobierania korzenia drzewa
 
 };
