@@ -1,59 +1,31 @@
-#include "FileManager.h"   // Do³¹czenie nag³ówka FileManager
-#include <fstream>         // Do obs³ugi plików
-#include <iostream>        // Do wyœwietlania komunikatów
-#include <sstream>         // Do przetwarzania linii tekstowych
-
+#include "FileManager.h"
+#include <fstream>
 using namespace std;
 
-// Konstruktor klasy FileManager
-FileManager::FileManager() {
-    // Obecnie konstruktor nie wykonuje ¿adnych operacji
+// Zapis drzewa BST do pliku binarnego
+bool FileManager::saveBinary(const string& filename, BST& tree) {
+    ofstream out(filename, ios::binary);  // otwieramy plik do zapisu binarnego
+    if (!out) return false;               // jeœli pliku nie da siê otworzyæ, zwracamy false
+    tree.saveToBinary(out);               // zapisujemy drzewo
+    return true;                          // zapis zakoñczony sukcesem
 }
 
-// Wczytywanie liczb z pliku tekstowego do drzewa BST
-void FileManager::loadFromText(BST& tree, const std::string& filename) {
-    ifstream file(filename); // Otwieramy plik tekstowy do odczytu
-    if (!file.is_open()) {
-        cerr << "Nie mozna otworzyc pliku: " << filename << endl;
-        return;
-    }
-
-    string line;
-    while (getline(file, line)) {        // Czytamy plik linia po linii
-        istringstream iss(line);
-        int value;
-        while (iss >> value) {            // Wczytujemy liczby z jednej linii
-            tree.insert(value);           // Wstawiamy ka¿d¹ liczbê do drzewa
-        }
-    }
-
-    file.close(); // Zamykamy plik po odczycie
+// Wczytanie drzewa BST z pliku binarnego
+bool FileManager::loadBinary(const string& filename, BST& tree) {
+    ifstream in(filename, ios::binary);   // otwieramy plik do odczytu binarnego
+    if (!in) return false;                // jeœli pliku nie da siê otworzyæ, zwracamy false
+    tree.loadFromBinary(in);              // wczytujemy drzewo
+    return true;                          // wczytanie zakoñczone sukcesem
 }
 
-// Zapis drzewa do pliku binarnego
-void FileManager::saveBinary(const BST& tree, const std::string& filename) {
-    ofstream file(filename, ios::binary); // Otwieramy plik binarnie do zapisu
-    if (!file.is_open()) {
-        cerr << "Nie mozna utworzyc pliku: " << filename << endl;
-        return;
-    }
-
-    // Wywo³anie funkcji BST do zapisu preorder do pliku binarnego
-   // tree.saveToBinary(file);                                                    potem dodac !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    file.close(); // Zamykamy plik
+// Zapis drzewa BST do pliku tekstowego
+bool FileManager::saveText(const string& filename, BST& tree) {
+    // metoda saveToText zwraca true/false w zaleznosci od powodzenia
+    return tree.saveToText(filename);
 }
 
-// Odczyt drzewa z pliku binarnego
-void FileManager::loadBinary(BST& tree, const std::string& filename) {
-    ifstream file(filename, ios::binary); // Otwieramy plik binarnie do odczytu
-    if (!file.is_open()) {
-        cerr << "Nie mozna otworzyc pliku: " << filename << endl;
-        return;
-    }
-
-    // Wywo³anie funkcji BST do odczytu preorder z pliku binarnego
-    //tree.loadFromBinary(file);                                                           potem dodac !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    file.close(); // Zamykamy plik
+// Wczytanie drzewa BST z pliku tekstowego
+bool FileManager::loadText(const string& filename, BST& tree) {
+    // metoda loadFromText zwraca true/false w zaleznosci od powodzenia
+    return tree.loadFromText(filename);
 }

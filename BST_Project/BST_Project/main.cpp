@@ -1,88 +1,122 @@
-﻿#include <iostream>       // Biblioteka do wejścia/wyjścia
-#include <string>         // Biblioteka do używania typu std::string
-#include "BST.h"          // Klasa BST – logika drzewa
-#include "FileManager.h"  // Klasa FileManager – obsługa plików
+﻿#include <iostream>
+#include <string>
+#include "BST.h"
+#include "FileManager.h"
 
 using namespace std;
 
-
-
-// Funkcja wyświetlająca menu programu
-void printMenu() {
-    cout << "\n===== MENU =====" << endl;
-    cout << "1) Dodaj element" << endl;
-    cout << "2) Usun element" << endl;
-    cout << "3) Szukaj drogi do elementu" << endl;
-    cout << "4) Min/Max" << endl;
-    cout << "5) Preorder" << endl;
-    cout << "6) Inorder" << endl;
-    cout << "7) Postorder" << endl;
-    cout << "8) Wyjscie" << endl;
-    cout << "================" << endl;
+// Funkcja wyświetlająca menu dostępnych opcji dla użytkownika
+void menu() {
+    cout << "\n===== MENU =====\n";
+    cout << "1) Dodaj element\n";
+    cout << "2) Usun element\n";
+    cout << "3) Pokaz sciezke do elementu\n";
+    cout << "4) Preorder\n";
+    cout << "5) Inorder\n";
+    cout << "6) Postorder\n";
+    cout << "7) Zapisz binarnie\n";
+    cout << "8) Wczytaj binarnie\n";
+    cout << "9) Zapisz tekstowo\n";
+    cout << "10) Wczytaj tekstowo\n";
+    cout << "0) Wyjscie\n";
 }
 
 int main() {
-    BST tree;           // Tworzymy obiekt drzewa BST
-    //FileManager fm;     // Tworzymy obiekt FileManager do obsługi plików
-    int choice,key;         // Zmienna do przechowywania wyboru użytkownika
-    
+
+    BST tree;              // Obiekt drzewa BST
+    int choice, key;       // 'choice' = wybór z menu, 'key' = wartość wpisywana przez użytkownika
+    string filename;       // nazwa pliku do zapisu/odczytu
+
+    // Pętla główna wykonuje się do momentu wybrania opcji 0
     do {
-        printMenu();    // Wyświetlamy menu
-        cout << "Wybierz opcje: ";
-        cin >> choice;
+        menu();                       // wyświetlenie menu
+        cout << "Wybor: ";
+        cin >> choice;                // pobranie wyboru od użytkownika
 
+        // Główna instrukcja obsługująca wybory użytkownika
         switch (choice) {
-        case 1: { // Dodawanie elementu
-            cout << "Podaj wartosc do dodania: ";
+
+        case 1:
+            // Dodawanie elementu do drzewa
+            cout << "Podaj wartosc: ";
             cin >> key;
-            tree.insert(key); // Wywołanie metody BST
-			tree.display(); // Wyświetlenie drzewa po dodaniu
+            tree.insert(key);         // wstawia element do BST
             break;
-        }
-        case 2: { // Usuwanie elementu
-            cout << "Podaj wartosc do usuniecia: ";
+
+        case 2:
+            // Usuwanie elementu z drzewa
+            cout << "Podaj wartosc: ";
             cin >> key;
-            tree.remove(key); // Wywołanie metody BST
-            tree.display();
+            tree.remove(key);         // usuwa element z BST
             break;
-        }
-        case 3: { // Szukanie drogi do elementu
-            cout << "Podaj wartosc do wyszukania: ";
+
+        case 3:
+            // Pokazanie ścieżki od korzenia do wskazanego elementu
+            cout << "Podaj wartosc: ";
             cin >> key;
-            tree.search(key); // Wywołanie metody BST
+            tree.showPathTo(key);     // wypisuje trasę szukania
             break;
-        }
-        case 4: { 
-            if (tree.getRoot()) {
-                cout << "Min:" << tree.minNode(tree.getRoot())->key
-                    << ", Max:" << tree.maxNode(tree.getRoot())->key << endl;
-            }
-			else cout << "Drzewo jest puste." << endl;
-            break; 
-        }
-        case 5: { 
-			cout << "Preorder: "; tree.preorder(tree.getRoot()); cout << endl;
+
+        case 4:
+            // Przejście drzewa w porządku preorder
+            cout << "Preorder: ";
+            tree.preorder(tree.getRoot());
+            cout << endl;
             break;
-        }
-        case 6: { 
-			cout << "Inorder: "; tree.inorder(tree.getRoot()); cout << endl;
+
+        case 5:
+            // Przejście drzewa in-order (posortowane wypisanie)
+            cout << "Inorder: ";
+            tree.inorder(tree.getRoot());
+            cout << endl;
             break;
-        }
-        case 7: { 
-			cout << "Postorder: "; tree.postorder(tree.getRoot()); cout << endl;
+
+        case 6:
+            // Przejście drzewa postorder
+            cout << "Postorder: ";
+            tree.postorder(tree.getRoot());
+            cout << endl;
             break;
-        }
-        case 0: { // Odczyt binarny
-			cout << "Koniec programu." << endl;
+
+        case 7:
+            // Zapis drzewa do pliku w formacie binarnym
+            cout << "Podaj nazwe pliku: ";
+            cin >> filename;
+            FileManager::saveBinary(filename, tree);
             break;
-        }
-        default: { // Niepoprawny wybór
-            cout << "Nieprawidlowy wybor! Sprobuj ponownie." << endl;
+
+        case 8:
+            // Odczyt drzewa z pliku binarnego
+            cout << "Podaj nazwe pliku: ";
+            cin >> filename;
+            FileManager::loadBinary(filename, tree);
             break;
-        }
+
+        case 9:
+            // Zapis drzewa do pliku tekstowego
+            cout << "Podaj nazwe pliku: ";
+            cin >> filename;
+            FileManager::saveText(filename, tree);
+            break;
+
+        case 10:
+            // Odczyt drzewa z pliku tekstowego
+            cout << "Podaj nazwe pliku: ";
+            cin >> filename;
+            FileManager::loadText(filename, tree);
+            break;
+
+        case 0:
+            // Wyjście z programu
+            cout << "Koniec programu.\n";
+            break;
+
+        default:
+            // Jeśli użytkownik wpisał zły numer
+            cout << "Nieprawidlowy wybor.\n";
         }
 
-    } while (choice != 0); // Pętla działa dopóki użytkownik nie wybierze opcji 0
+    } while (choice != 0);  // dopóki nie wybrano opcji wyjścia
 
-    return 0; // Zakończenie programu
+    return 0;
 }
