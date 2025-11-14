@@ -84,5 +84,5 @@ int main() {
 
     } while (choice != 0); // Pętla działa dopóki użytkownik nie wybierze opcji 0
 
-    return 0; // Zakończenie programu
+    return 0; // Zakończenie program
 }
