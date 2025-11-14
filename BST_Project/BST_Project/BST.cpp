@@ -28,7 +28,7 @@ bool BST::insert(int key) {
 
 	while (x) {
 		y = x;
-		if (key = x->key)
+		if (key == x->key)
 		{
 			delete n;
 			return false;
@@ -174,13 +174,14 @@ BSTNode* BST::removeNode(BSTNode* x) {
 //funkcja do usuwania klucza z drzewa
 void BST::remove(int key) {
 	BSTNode* x = search(key);		//szukamy wêz³a do usuniêcia
-	if (x) {						//jeœli znaleŸliœmy wêze³
-		removeNode(x);				//usuwamy go				--> jest w osobnej funkcji removeNode()
-		count--;					//zmniejszamy licznik wêz³ów
+	if (!x) {	
+		cout << "Wartosc nie znaleziona w drzewie.\n";
+		return;
 	}
 	else
 	{
-		cout << "Wartosc nie znaleziona w drzewie." << endl;
+		BSTNode* del = removeNode(x);	//usuwamy wêze³
+		delete del;
 	}
 }
 
