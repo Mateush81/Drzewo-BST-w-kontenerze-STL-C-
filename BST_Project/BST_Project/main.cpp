@@ -25,7 +25,7 @@ int main() {
     BST tree;           // Tworzymy obiekt drzewa BST
     //FileManager fm;     // Tworzymy obiekt FileManager do obsługi plików
     int choice,key;         // Zmienna do przechowywania wyboru użytkownika
-
+    
     do {
         printMenu();    // Wyświetlamy menu
         cout << "Wybierz opcje: ";

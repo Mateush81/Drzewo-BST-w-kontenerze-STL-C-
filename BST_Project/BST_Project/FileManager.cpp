@@ -39,7 +39,7 @@ void FileManager::saveBinary(const BST& tree, const std::string& filename) {
     }
 
     // Wywo³anie funkcji BST do zapisu preorder do pliku binarnego
-    tree.saveToBinary(file);
+   // tree.saveToBinary(file);                                                    potem dodac !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     file.close(); // Zamykamy plik
 }
@@ -53,7 +53,7 @@ void FileManager::loadBinary(BST& tree, const std::string& filename) {
     }
 
     // Wywo³anie funkcji BST do odczytu preorder z pliku binarnego
-    tree.loadFromBinary(file);
+    //tree.loadFromBinary(file);                                                           potem dodac !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     file.close(); // Zamykamy plik
 }
