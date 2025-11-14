@@ -3,40 +3,40 @@
 #include <fstream>
 #include <string>
 
+
 /*
-Dzia³anie BST (Binary Search Tree):
-„Lewe < rodzic < prawe”
-Wszystko po lewej stronie ma wartoœci mniejsze od rodzica,
+Dzia³anie BST(Binary Search Tree):
+„Lewy < rodzic < prawy”
+wszystko po lewej stronie ma wartoœci mniejsze od rodzica,
 wszystko po prawej stronie ma wartoœci wiêksze od rodzica.
 */
 
-// Struktura jednego wêz³a BST
-struct BSTNode {
-    int key;                  // wartoœæ w wêŸle
-    BSTNode* left;            // lewe dziecko
-    BSTNode* right;           // prawe dziecko
-    BSTNode* parent;          // wskaŸnik na rodzica
 
-    BSTNode(int k) : key(k), left(nullptr), right(nullptr), parent(nullptr) {}
+
+struct BSTNode {
+	int key;     // wartoœæ (czyli liczba, po której sortujemy)
+	BSTNode* left;  // wskaŸnik na lewe dziecko (mniejsze)
+	BSTNode* right;  // wskaŸnik na prawe dziecko (wiêksze)
+	BSTNode* parent;  // wskaŸnik na rodzica (¿eby ³atwiej szukaæ poprzednika i nastêpnika)
+	BSTNode(int k) : key(k), left(nullptr), right(nullptr), parent(nullptr) {}   // pocz¹tkowo ustawia na nullptr ¿eby nie mieæ œmieci w pamiêci
+
 };
+
 
 class BST {
 
 private:
-    BSTNode* root;      // korzeñ drzewa
-    int count;          // liczba wêz³ów
+	BSTNode* root;  // wskaŸnik na korzeñ drzewa
+	int count;		// liczba wêz³ów w drzewie
+	BSTNode* removeNode(BSTNode* x);	// funkcja do usuwania wêz³a
+	void destroy(BSTNode* x);			// funkcja do niszczenia drzewa (usuwania wszystkich wêz³ów)
 
-    void destroy(BSTNode* x);              // usuwa ca³e drzewo
-    BSTNode* removeNode(BSTNode* x);       // usuwa jeden wêze³
-
-    void writeInorder(BSTNode* x, std::ofstream& out) const; // do zapisu tekstowego
-    void loadTextInsert(std::ifstream& in);                  // do odczytu tekstowego
 
 	void writeInorder(BSTNode* x, std::ofstream& out) const;
 
 public:
-    BST();
-    ~BST();
+	BST();
+	~BST();
 
 	bool insert(int key);	// funkcja do wstawiania klucza do drzewa
 	void remove(int key);			// funkcja do usuwania klucza z drzewa
@@ -54,10 +54,18 @@ public:
 	void preorder(BSTNode* node);	//wyœwietlanie w kolejnoœci preorder
 	void inorder(BSTNode* node);	//wyœwietlanie w kolejnoœci inorder
 	void postorder(BSTNode* node);	//wyœwietlanie w kolejnoœci postorder
-	void display();					// funkcja do wyœwietlania drzewa
-	BSTNode* getRoot() { return root; }		// funkcja do pobierania korzenia drzewa
 
-    // zapis / odczyt binarny
-    void saveToBinary(std::ostream& out) const;
-    void loadFromBinary(std::istream& in);
+
+
+	void display();					// funkcja do wyœwietlania drzewa
+	void showPathTo(int key);			// funkcja do wyœwietlania œcie¿ki
+
+	bool saveToText(const std::string& filename) const; // funkcja do zapisywania drzewa do pliku tekstowego
+	bool loadFromText(const std::string& filename); // funkcja do wczytywania drzewa z pliku tekstowego
+
+	void saveToBinary(std::ostream& out) const; // funkcja do zapisywania drzewa do pliku binarnego
+	void loadFromBinary(std::istream& in); // funkcja do wczytywania drzewa z pliku binarnego
+
+	BSTNode* getRoot() { return root; } // funkcja do pobierania korzenia drzewa
+
 };
