@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// Funkcja wyświetlająca menu dostępnych opcji dla użytkownika
 void menu() {
     cout << "\n===== MENU =====\n";
     cout << "1) Dodaj element\n";
@@ -21,87 +22,101 @@ void menu() {
 }
 
 int main() {
-    BST tree;
-    int choice, key;
-    string filename;
 
+    BST tree;              // Obiekt drzewa BST
+    int choice, key;       // 'choice' = wybór z menu, 'key' = wartość wpisywana przez użytkownika
+    string filename;       // nazwa pliku do zapisu/odczytu
+
+    // Pętla główna wykonuje się do momentu wybrania opcji 0
     do {
-        menu();
+        menu();                       // wyświetlenie menu
         cout << "Wybor: ";
-        cin >> choice;
+        cin >> choice;                // pobranie wyboru od użytkownika
 
+        // Główna instrukcja obsługująca wybory użytkownika
         switch (choice) {
 
         case 1:
+            // Dodawanie elementu do drzewa
             cout << "Podaj wartosc: ";
             cin >> key;
-            tree.insert(key);
+            tree.insert(key);         // wstawia element do BST
             break;
 
         case 2:
+            // Usuwanie elementu z drzewa
             cout << "Podaj wartosc: ";
             cin >> key;
-            tree.remove(key);
+            tree.remove(key);         // usuwa element z BST
             break;
 
         case 3:
+            // Pokazanie ścieżki od korzenia do wskazanego elementu
             cout << "Podaj wartosc: ";
             cin >> key;
-            tree.showPathTo(key);
+            tree.showPathTo(key);     // wypisuje trasę szukania
             break;
 
         case 4:
+            // Przejście drzewa w porządku preorder
             cout << "Preorder: ";
             tree.preorder(tree.getRoot());
             cout << endl;
             break;
 
         case 5:
+            // Przejście drzewa in-order (posortowane wypisanie)
             cout << "Inorder: ";
             tree.inorder(tree.getRoot());
             cout << endl;
             break;
 
         case 6:
+            // Przejście drzewa postorder
             cout << "Postorder: ";
             tree.postorder(tree.getRoot());
             cout << endl;
             break;
 
         case 7:
+            // Zapis drzewa do pliku w formacie binarnym
             cout << "Podaj nazwe pliku: ";
             cin >> filename;
             FileManager::saveBinary(filename, tree);
             break;
 
         case 8:
+            // Odczyt drzewa z pliku binarnego
             cout << "Podaj nazwe pliku: ";
             cin >> filename;
             FileManager::loadBinary(filename, tree);
             break;
 
         case 9:
+            // Zapis drzewa do pliku tekstowego
             cout << "Podaj nazwe pliku: ";
             cin >> filename;
             FileManager::saveText(filename, tree);
             break;
 
         case 10:
+            // Odczyt drzewa z pliku tekstowego
             cout << "Podaj nazwe pliku: ";
             cin >> filename;
             FileManager::loadText(filename, tree);
             break;
 
         case 0:
+            // Wyjście z programu
             cout << "Koniec programu.\n";
             break;
 
         default:
+            // Jeśli użytkownik wpisał zły numer
             cout << "Nieprawidlowy wybor.\n";
         }
 
-    } while (choice != 0);
+    } while (choice != 0);  // dopóki nie wybrano opcji wyjścia
 
     return 0;
 }
-// działa 
