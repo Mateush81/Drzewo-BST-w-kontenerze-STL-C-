@@ -1,51 +1,68 @@
 #pragma once
 #include <iostream>
-
+#include <fstream>
+#include <string>
 
 /*
-Dzia³anie BST(Binary Search Tree):
-„Lewy < rodzic < prawy”
-wszystko po lewej stronie ma wartoœci mniejsze od rodzica,
+Dzia³anie BST (Binary Search Tree):
+„Lewe < rodzic < prawe”
+Wszystko po lewej stronie ma wartoœci mniejsze od rodzica,
 wszystko po prawej stronie ma wartoœci wiêksze od rodzica.
 */
 
-
-
+// Struktura jednego wêz³a BST
 struct BSTNode {
-	int key;     // wartoœæ (czyli liczba, po której sortujemy)
-	BSTNode* left;  // wskaŸnik na lewe dziecko (mniejsze)
-	BSTNode* right;  // wskaŸnik na prawe dziecko (wiêksze)
-	BSTNode* parent;  // wskaŸnik na rodzica (¿eby ³atwiej szukaæ poprzednika i nastêpnika)
-	BSTNode(int k) : key(k), left(nullptr), right(nullptr), parent(nullptr) {}   // pocz¹tkowo ustawia na nullptr ¿eby nie mieæ œmieci w pamiêci
+    int key;                  // wartoœæ w wêŸle
+    BSTNode* left;            // lewe dziecko
+    BSTNode* right;           // prawe dziecko
+    BSTNode* parent;          // wskaŸnik na rodzica
 
+    BSTNode(int k) : key(k), left(nullptr), right(nullptr), parent(nullptr) {}
 };
-
 
 class BST {
 
 private:
-	BSTNode* root;  // wskaŸnik na korzeñ drzewa
-	int count;		// liczba wêz³ów w drzewie
-	BSTNode* removeNode(BSTNode* x);	// funkcja do usuwania wêz³a
-	void destroy(BSTNode* x);			// funkcja do niszczenia drzewa (usuwania wszystkich wêz³ów)
+    BSTNode* root;      // korzeñ drzewa
+    int count;          // liczba wêz³ów
 
+    void destroy(BSTNode* x);              // usuwa ca³e drzewo
+    BSTNode* removeNode(BSTNode* x);       // usuwa jeden wêze³
+
+    void writeInorder(BSTNode* x, std::ofstream& out) const; // do zapisu tekstowego
+    void loadTextInsert(std::ifstream& in);                  // do odczytu tekstowego
 
 public:
-	BST();
-	~BST();
+    BST();
+    ~BST();
 
-	bool insert(int key);	// funkcja do wstawiania klucza do drzewa
-	BSTNode* search(int key);		// funkcja do wyszukiwania klucza w drzewie
-	BSTNode* minNode(BSTNode* x);	// funkcja do znajdowania najmniejszego wêz³a
-	BSTNode* maxNode(BSTNode* x);	// funkcja do znajdowania najwiêkszego wêz³a
-	BSTNode* pred(BSTNode* x);		// funkcja do znajdowania poprzednika wêz³a
-	BSTNode* succ(BSTNode* x);		// funkcja do znajdowania nastêpnika wêz³a
-	void remove(int key);			// funkcja do usuwania klucza z drzewa
+    bool insert(int key);     // dodawanie elementu
+    void remove(int key);     // usuwanie elementu
+    BSTNode* search(int key); // szukanie elementu
 
-	void preorder(BSTNode* node);	//wyœwietlanie w kolejnoœci preorder
-	void inorder(BSTNode* node);	//wyœwietlanie w kolejnoœci inorder
-	void postorder(BSTNode* node);	//wyœwietlanie w kolejnoœci postorder
-	void display();					// funkcja do wyœwietlania drzewa
-	BSTNode* getRoot() { return root; }		// funkcja do pobierania korzenia drzewa
+    // min / max
+    BSTNode* minNode(BSTNode* x);
+    BSTNode* maxNode(BSTNode* x);
 
+    // poprzednik / nastêpnik
+    BSTNode* pred(BSTNode* x);
+    BSTNode* succ(BSTNode* x);
+
+    // przejœcia drzewa
+    void preorder(BSTNode* x);
+    void inorder(BSTNode* x);
+    void postorder(BSTNode* x);
+
+    // pomocnicze
+    void display();                // wyœwietlanie inorder
+    BSTNode* getRoot() { return root; }
+
+    // NOWE — wymagane w zadaniu:
+    void showPathTo(int key);      // wypisuje œcie¿kê do elementu
+    bool saveToText(const std::string& filename) const;
+    bool loadFromText(const std::string& filename);
+
+    // zapis / odczyt binarny
+    void saveToBinary(std::ostream& out) const;
+    void loadFromBinary(std::istream& in);
 };
