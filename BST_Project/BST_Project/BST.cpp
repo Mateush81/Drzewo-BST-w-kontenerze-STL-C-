@@ -2,11 +2,33 @@
 using namespace std;
 
 
-BST::BST() : root(nullptr), count(0) {}  //root(nullptr), czyli na pocz¹tku drzewo jest puste
+BST::BST() : root(nullptr), count(0) {}  //root(nullptr), czyli na pocz¹tku drzewo jest puste (brak korzenia, licznik = 0)
 
 BST::~BST() { destroy(root); }			//niszczenie drzewa przy usuwaniu obiektu BST
 
 
+
+
+
+// 1. Zejœcie max. w lewo
+// 2. Zejœcie max. w prawo
+// 3. Gdy brak dzieci, usuwamy wêze³ i wracamy do rodzica
+
+/*
+	 8
+	/ \
+   3   10
+  / \
+ 1   6
+
+ - destroy(8) bêdzie wywo³ywaæ destroy(3) i destroy(10)
+ - destroy(3) bêdzie wywo³ywaæ destroy(1) i destroy(6)
+ - destroy(1) nie ma dzieci, wiêc usuwamy 1
+ - destroy(6) nie ma dzieci, wiêc usuwamy 6
+ - Po usuniêciu 1 i 6, wracamy do destroy(3) i usuwamy 3
+ - destroy(10) nie ma dzieci, wiêc usuwamy 10
+ - Po usuniêciu 3 i 10, wracamy do destroy(8) i usuwamy 8
+*/
 
 
 void BST::destroy(BSTNode* x) {			// usuwanie rekurencyjnie, czyli: lewe -> prawe -> rodzic -> delete
@@ -21,29 +43,45 @@ void BST::destroy(BSTNode* x) {			// usuwanie rekurencyjnie, czyli: lewe -> praw
 //wstawianie elementu
 
 bool BST::insert(int key) {
+
+	// Tworzymy nowy wêze³ z dan¹ wartoœci¹
 	BSTNode* n = new BSTNode(key);		// 'n' czyli, nowy wezel  
-	BSTNode* y = nullptr;				// 'y' oznacza poprzednika  
+	
+	
+	// y = wêze³ poprzedni (rodzic), x = aktualnie przegl¹dany
+	BSTNode* y = nullptr;				  
 	BSTNode* x = root;					//'x' oznacza obecny wezel (pocz¹tkowo korzeñ)  
 
 
+	// Szukamy miejsca, w które nowy element pasuje
 	while (x) {
-		y = x;
-		if (key == x->key)
+		y = x;					// zapamiêtujemy poprzednika
+		if (key == x->key)		// // jeœli wartoœæ ju¿ jest w drzewie -> nie dodajemy
 		{
 			delete n;
 			return false;
 		}
-		x = (key < x->key) ? x->left : x->right;	//jeœli klucz jest mniejszy, idziemy w lewo, jeœli wiêkszy, idziemy w prawo		
+
+		//jeœli klucz jest mniejszy, idziemy w lewo, jeœli wiêkszy, idziemy w prawo
+		x = (key < x->key) ? x->left : x->right;	
 	}
 
 
-	n->parent = y;						//ustawiamy rodzica nowego wêz³a na 'y'
-	if (!y) {							//jeœli drzewo jest puste
+	//ustawiamy rodzica nowego wêz³a na 'y'
+	n->parent = y;	
+
+
+	// Jeœli drzewo by³o puste
+	if (!y) {							
 		root = n;						//nowy wêze³ staje siê korzeniem
 	}
-	else if (key < y->key) {			//jeœli klucz jest mniejszy ni¿ klucz 'y'
+
+	// Jeœli nowy klucz ('y') jest mniejszy od rodzica -> idzie na lewo
+	else if (key < y->key) {			
 		y->left = n;					//nowy wêze³ staje siê lewym dzieckiem 'y'
 	}
+
+	// w przeciwnym razie na prawo
 	else {
 		y->right = n;					//nowy wêze³ staje siê prawym dzieckiem 'y'
 	}
@@ -55,6 +93,9 @@ bool BST::insert(int key) {
 //szukanie elementu
 BSTNode* BST::search(int key) {
 	BSTNode* x = root;					//'x' oznacza obecny wezel (pocz¹tkowo korzeñ)
+	
+	
+	// Idziemy w dó³ drzewa porównuj¹c wartoœci
 	while (x && x->key != key) {
 		x = (key < x->key) ? x->left : x->right;	//jeœli klucz jest mniejszy, idziemy w lewo, jeœli wiêkszy, idziemy w prawo
 	}
@@ -65,6 +106,9 @@ BSTNode* BST::search(int key) {
 
 //min i max
 BSTNode* BST::minNode(BSTNode* x) {
+
+	// Minimum to element najbardziej na lewo
+
 	while (x && x->left) {					//dopóki istnieje lewe dziecko
 		x = x->left;					//idziemy w lewo
 	}
@@ -73,6 +117,9 @@ BSTNode* BST::minNode(BSTNode* x) {
 
 
 BSTNode* BST::maxNode(BSTNode* x) {
+
+	// Maksimum to element najbardziej na prawo
+
 	while (x && x->right) {				//dopóki istnieje prawe dziecko
 		x = x->right;					//idziemy w prawo
 	}
@@ -89,25 +136,43 @@ BSTNode* BST::maxNode(BSTNode* x) {
 
 
 
-//poprzednik
+//poprzednik (wartoœæ zaraz przed x [z lewej strony])
 BSTNode* BST::pred(BSTNode* x) {
-	if (x->left) {					//jeœli istnieje lewe dziecko
-		return maxNode(x->left);	//to poprzednik to maksimum w lewym poddrzewie
+
+	// Jeœli istnieje lewe poddrzewo 
+	if (x->left) {					
+		return maxNode(x->left);	//-> to  tam szukamy najwiêkszego
 	}
+
+
+	// W innym przypadku idziemy w górê drzewa
+	// dopóki idziemy „z lewej strony”
 	BSTNode* y = x->parent;			//'y' oznacza rodzica
+
+
+
 	while (y && x == y->left) {		//dopóki 'x' jest lewym dzieckiem 'y'
 		x = y;
 		y = y->parent;				//idziemy w górê do rodzica
 	}
-	return y;						//zwracamy poprzednika
+	return y;						//zwracamy poprzednika, ewntualnie nullptr
 }
 
-//nastêpnik
+//nastêpnik (najmniejsza wartoœc wiêksza od X)
 BSTNode* BST::succ(BSTNode* x) {
-	if (x->right) {					//jeœli istnieje prawe dziecko
-		return minNode(x->right);	//to nastêpnik to minimum w prawym poddrzewie
+
+	// Jeœli istnieje prawe poddrzewo
+	if (x->right) {					
+		return minNode(x->right);	//-> to  tam szukamy najmniejszego
 	}
+
+
+	// W przeciwnym razie wchodzimy wy¿ej,
+	// dopóki idziemy „od prawej strony”
 	BSTNode* y = x->parent;			//'y' oznacza rodzica
+
+
+
 	while (y && x == y->right) {	//dopóki 'x' jest prawym dzieckiem 'y'
 		x = y;
 		y = y->parent;				//idziemy w górê do rodzica
@@ -121,38 +186,60 @@ BSTNode* BST::succ(BSTNode* x) {
 //Usuwanie wêz³a
 
 BSTNode* BST::removeNode(BSTNode* x) {
-	BSTNode* y = x->parent;
-	BSTNode* z;
 
+	BSTNode* y = x->parent;		// 'y' to rodzic
+	BSTNode* z;					// ¿eby usun¹æ wêze³ to najpierw musimy znaleŸæ wêze³ do zast¹pienia
+								// tutaj 'z' bêdzie tym wêz³em ('z' za miejsce x)
 
+	//PRZYPADKI:
+
+	//1. Wêze³ ma dwoje dzieci
 	if (x->left && x->right)
 	{
+
+		// losowo wybieramy poprzednika lub nastêpnika
 		z = (rand() % 2) ? removeNode(pred(x)) : removeNode(succ(x));
+
+
+		// przepinamy lewe dziecko
 		z->left = x->left;
 		if (z->left)
 		{
 			z->left->parent = z;
 		}
 
+		// przepinamy prawe dziecko
 		z->right = x->right;
 
 		if (z->right)
 		{
 			z->right->parent = z;
 		}
+
+
+		// removeNode zmniejszy³ liczbê elementów,
+		// musimy j¹ z powrotem zwiêkszyæ
 		count++;
 	}
+
+
+	//2. Wêze³ ma jedno dziecko lub nie ma dzieci
 	else
-	{
+	{	
+		// wybieramy istniej¹ce dziecko
 		z = (x->left) ? x->left : x->right;
 	}
 
+	// ustawiamy rodzica z
 	if (z)
 	{
 		z->parent = y;
 	}
+
+	// przepinamy z w miejsce x
 	if (!y)
 	{
+		// jeœli usuwamy korzeñ
 		root = z;
 	}
 	else if (y->left == x)
@@ -173,14 +260,20 @@ BSTNode* BST::removeNode(BSTNode* x) {
 
 //funkcja do usuwania klucza z drzewa
 void BST::remove(int key) {
-	BSTNode* x = search(key);		//szukamy wêz³a do usuniêcia
+
+
+	//szukamy wêz³a do usuniêcia
+	BSTNode* x = search(key);	
+
+
 	if (!x) {	
 		cout << "Wartosc nie znaleziona w drzewie.\n";
 		return;
 	}
 	else
 	{
-		BSTNode* del = removeNode(x);	//usuwamy wêze³
+		// usuwamy wêze³ i zwalniamy pamiêæ
+		BSTNode* del = removeNode(x);	
 		delete del;
 	}
 }
@@ -321,3 +414,5 @@ void BST::loadFromBinary(istream& in) {
 		insert(k);					//wstawiamy klucz do drzewa
 	}
 }
+
+

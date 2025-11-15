@@ -23,7 +23,7 @@ void menu() {
 
 int main() {
 
-    BST tree;              // Obiekt drzewa BST
+    BST tree;              // nasze drzewo BST
     int choice, key;       // 'choice' = wybór z menu, 'key' = wartość wpisywana przez użytkownika
     string filename;       // nazwa pliku do zapisu/odczytu
 
@@ -33,7 +33,7 @@ int main() {
         cout << "Wybor: ";
         cin >> choice;                // pobranie wyboru od użytkownika
 
-        // Główna instrukcja obsługująca wybory użytkownika
+        
         switch (choice) {
 
         case 1:
